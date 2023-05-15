@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import axios from 'axios';
 import './App.css'
 
@@ -7,6 +7,7 @@ function App() {
   const [userName, setUserName] = useState('');
   const [date, setDate] = useState('');
   const [image, setImage] = useState('');
+  const [posts, setPosts] = useState({});
 
   const handleSubmit = async() => {
     const formData = new FormData();
@@ -24,6 +25,17 @@ function App() {
     console.log(response);
   }
 
+  const showPosts = async() => {
+    const url = `${apiUrl}/posts`;
+    setPosts(await axios.get(url));
+  }
+
+  useEffect(() => {
+    showPosts();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+  console.log(posts.data);
+
   return (
     <>
       <div>
@@ -34,6 +46,19 @@ function App() {
           <input type="file" name="image" onChange={event => setImage(event.target.files[0])} required />
           <button type='submit' style={{ border: "1px solid black" }}>Submit</button>
         </form>
+        <div>
+          <h1>Posts</h1>
+          {posts.data !== undefined && posts.data.data.length > 0 && (
+            <div>
+              {posts.data.data.map(post => (
+                <div key={post.id} style={{border: "5px solid blue", borderRadius: "5px", margin: "5px"}}>
+                  <h3>{post.userName} ({post.date})</h3>
+                  <img src={`${apiUrl}/postImages/${post.image}`} alt="" />
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
     </>
   )

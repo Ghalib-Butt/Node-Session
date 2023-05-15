@@ -103,3 +103,6 @@
 
 # TernJS port file
 **/.tern-port
+
+# Images uploaded folder
+**/uploads

@@ -12,7 +12,7 @@ const dbName = process.env.DB_NAME || 'dev';
 
 // Use of middlewares...
 app.use(cors());
-// app.use('/static', express.static('public/'));
+app.use(express.static('uploads/'));
 app.use((req, res, next) => {
     console.log(`Request Method: ${req.method} ------> Request URL: ${req.url} \n`);
     next();
